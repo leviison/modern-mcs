@@ -195,17 +195,21 @@ Additional backend verification on 2026-02-16:
   - `Dockerfile` now builds frontend (`web/dist`) and copies `migrations/` into runtime image
   - `.dockerignore` added for leaner build context
   - `deployments/docker-compose.prod.yml` for app + postgres
-  - `deployments/docker-compose.dockhand.yml` for Dockhand/remote-node friendly deploy (no relative bind mounts)
+  - `deployments/docker-compose.dockhand.yml` for Dockhand/remote-node friendly deploy (no relative bind mounts; no build context required)
   - `deployments/.env.prod.example` for server env/secrets bootstrap
   - `deployments/README.md` now has production-like rollout commands and verification steps
+- Added GHCR image publish workflow:
+  - `.github/workflows/publish-image.yml`
+  - Publishes `ghcr.io/leviison/modern-mcs:latest` and sha tags on push to `main`
+  - Dockhand compose now uses `APP_IMAGE` (registry pull) instead of local `build` directives
 
 To serve frontend via backend:
 - Build frontend to `web/dist` (or set `FRONTEND_DIST_DIR` to your output dir)
 - Run backend normally; it serves static assets at `/` and API at `/v1/*`
 
 ## Priority next steps
-1. Decide whether to remove runtime auto-create DDL once migration execution is managed externally.
-2. Add automated migration execution strategy (or keep manual apply + mark model explicitly).
+1. Ensure GHCR package visibility/credentials are configured so Dockhand can pull `APP_IMAGE`.
+2. Decide whether to remove runtime auto-create DDL once migration execution is managed externally.
 3. Add reverse-proxy/TLS compose profile (Caddy or Nginx) for direct internet exposure.
 
 ## Notes

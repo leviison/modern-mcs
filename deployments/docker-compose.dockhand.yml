@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -17,10 +15,7 @@ services:
       retries: 20
 
   app:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-    image: modern-mcs:prod
+    image: ${APP_IMAGE}
     restart: unless-stopped
     depends_on:
       postgres:

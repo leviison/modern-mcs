@@ -19,6 +19,7 @@ make run
 Deploy with containers:
 - Production-like compose stack: `deployments/docker-compose.prod.yml`
 - Setup steps: `deployments/README.md`
+- GHCR image publish workflow: `.github/workflows/publish-image.yml`
 
 Health endpoints:
 

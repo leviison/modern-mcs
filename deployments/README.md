@@ -53,9 +53,17 @@ Use this compose file in Dockhand:
 Why:
 - It avoids relative host-path bind mounts (which can fail on remote Docker nodes with permission/path errors).
 - App bootstrap creates required tables at startup in PostgreSQL mode.
+- It pulls a prebuilt image (`APP_IMAGE`) instead of trying to build on the target node.
+
+Image publishing:
+- GitHub Actions workflow `.github/workflows/publish-image.yml` pushes images to:
+  - `ghcr.io/leviison/modern-mcs:latest`
+  - `ghcr.io/leviison/modern-mcs:sha-<commit>`
+- Ensure package visibility/permissions in GitHub allow your Dockhand runtime to pull the image.
 
 Required env vars in Dockhand:
 - `APP_PORT`
+- `APP_IMAGE` (example: `ghcr.io/leviison/modern-mcs:latest`)
 - `POSTGRES_DB`
 - `POSTGRES_USER`
 - `POSTGRES_PASSWORD`
