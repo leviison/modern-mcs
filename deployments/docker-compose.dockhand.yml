@@ -15,7 +15,7 @@ services:
       retries: 20
 
   app:
-    image: ${APP_IMAGE}
+    image: ${APP_IMAGE:-ghcr.io/leviison/modern-mcs:latest}
     restart: unless-stopped
     depends_on:
       postgres:
