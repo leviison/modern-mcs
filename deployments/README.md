@@ -44,3 +44,22 @@ Notes:
 - The app image includes backend binary, `web/dist`, and `migrations/`.
 - PostgreSQL initializes `0002_postgres_core_tables.sql` on first database creation.
 - Put a reverse proxy (Caddy/Nginx/Traefik) in front for TLS and domain routing.
+
+## Dockhand deployment
+
+Use this compose file in Dockhand:
+- `deployments/docker-compose.dockhand.yml`
+
+Why:
+- It avoids relative host-path bind mounts (which can fail on remote Docker nodes with permission/path errors).
+- App bootstrap creates required tables at startup in PostgreSQL mode.
+
+Required env vars in Dockhand:
+- `APP_PORT`
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `AUTH_BOOTSTRAP_USERNAME`
+- `AUTH_BOOTSTRAP_PASSWORD`
+- `AUTH_PASSWORD_PEPPER`
+- `AUTH_SESSION_TTL_SEC`

@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: modern-mcs:prod
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      HTTP_ADDR: :8080
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      AUTH_BOOTSTRAP_USERNAME: ${AUTH_BOOTSTRAP_USERNAME}
+      AUTH_BOOTSTRAP_PASSWORD: ${AUTH_BOOTSTRAP_PASSWORD}
+      AUTH_PASSWORD_PEPPER: ${AUTH_PASSWORD_PEPPER}
+      AUTH_SESSION_TTL_SEC: ${AUTH_SESSION_TTL_SEC}
+      AUTH_SESSION_STATE_FILE: /data/auth_sessions.json
+      AUTH_USER_STATE_FILE: /data/auth_users.json
+      FRONTEND_DIST_DIR: /web/dist
+      SQL_PROFILE_STATE_FILE: /data/sql_profiles.json
+      MIGRATIONS_DIR: /migrations
+      MIGRATION_STATE_FILE: /data/migration_state.json
+      AUDIT_LOG_FILE: /data/audit.log
+    ports:
+      - "${APP_PORT}:8080"
+    volumes:
+      - app_data:/data
+
+volumes:
+  postgres_data:
+  app_data:

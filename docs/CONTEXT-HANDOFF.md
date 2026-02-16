@@ -195,6 +195,7 @@ Additional backend verification on 2026-02-16:
   - `Dockerfile` now builds frontend (`web/dist`) and copies `migrations/` into runtime image
   - `.dockerignore` added for leaner build context
   - `deployments/docker-compose.prod.yml` for app + postgres
+  - `deployments/docker-compose.dockhand.yml` for Dockhand/remote-node friendly deploy (no relative bind mounts)
   - `deployments/.env.prod.example` for server env/secrets bootstrap
   - `deployments/README.md` now has production-like rollout commands and verification steps
 
