@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: modern-mcs-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: modern_mcs
+      POSTGRES_USER: modern_mcs
+      POSTGRES_PASSWORD: modern_mcs
+    ports:
+      - "5432:5432"
+    volumes:
+      - modern_mcs_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U modern_mcs -d modern_mcs"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  modern_mcs_pgdata:

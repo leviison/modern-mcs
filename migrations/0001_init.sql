@@ -1,0 +1,2 @@
+-- Initial migration placeholder.
+-- Add schema objects as legacy modules are ported.

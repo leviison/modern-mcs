@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: modern-mcs API
+  version: 0.1.0
+paths:
+  /healthz:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: OK
+  /readyz:
+    get:
+      summary: Readiness probe
+      responses:
+        '200':
+          description: Ready
+  /v1/info:
+    get:
+      summary: Service metadata
+      responses:
+        '200':
+          description: Info payload
+  /v1/auth/login:
+    post:
+      summary: Login with username/password
+      responses:
+        '200':
+          description: Auth token and user info
+  /v1/auth/me:
+    get:
+      summary: Current user from bearer token
+      responses:
+        '200':
+          description: User info
+  /v1/auth/logout:
+    post:
+      summary: Logout and revoke current bearer token
+      responses:
+        '204':
+          description: Logged out
+  /v1/auth/change-password:
+    post:
+      summary: Change current user's password
+      responses:
+        '204':
+          description: Password updated
+  /v1/sql-profiles:
+    get:
+      summary: List SQL profiles
+      responses:
+        '200':
+          description: SQL profile list
+    post:
+      summary: Create SQL profile
+      responses:
+        '201':
+          description: SQL profile created
+  /v1/sql-profiles/{id}:
+    get:
+      summary: Get SQL profile
+      responses:
+        '200':
+          description: SQL profile
+    put:
+      summary: Update SQL profile
+      responses:
+        '200':
+          description: SQL profile updated
+    delete:
+      summary: Delete SQL profile
+      responses:
+        '204':
+          description: SQL profile deleted
+  /v1/system/migrations:
+    get:
+      summary: List discovered migration files
+      responses:
+        '200':
+          description: Migration file list
+  /v1/system/migrations/status:
+    get:
+      summary: List migration files with applied status
+      responses:
+        '200':
+          description: Migration status list
+  /v1/system/migrations/{name}/apply:
+    post:
+      summary: Mark a migration file as applied
+      responses:
+        '200':
+          description: Migration marked applied
+  /v1/system/sessions:
+    get:
+      summary: List active sessions (admin)
+      responses:
+        '200':
+          description: Session list
+  /v1/system/sessions/{id}:
+    delete:
+      summary: Revoke an active session by session ID (admin)
+      responses:
+        '204':
+          description: Session revoked

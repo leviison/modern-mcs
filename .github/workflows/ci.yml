@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: modern_mcs
+          POSTGRES_USER: modern_mcs
+          POSTGRES_PASSWORD: modern_mcs
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U modern_mcs -d modern_mcs"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Verify formatting
+        run: |
+          UNFORMATTED="$(gofmt -l $(find . -name '*.go' -type f))"
+          if [[ -n "${UNFORMATTED}" ]]; then
+            echo "Unformatted files:"
+            echo "${UNFORMATTED}"
+            exit 1
+          fi
+
+      - name: Unit tests
+        run: make test
+
+      - name: Build
+        run: make build
+
+      - name: Wait for Postgres
+        env:
+          TEST_POSTGRES_DSN: postgres://modern_mcs:modern_mcs@127.0.0.1:5432/modern_mcs?sslmode=disable
+          WAIT_FOR_POSTGRES_TIMEOUT_SEC: "90"
+        run: go run ./cmd/waitforpostgres
+
+      - name: Postgres integration tests
+        env:
+          TEST_POSTGRES_DSN: postgres://modern_mcs:modern_mcs@127.0.0.1:5432/modern_mcs?sslmode=disable
+        run: make test-integration
+
+      - name: Frontend install
+        working-directory: ./web
+        run: npm ci
+
+      - name: Frontend build
+        working-directory: ./web
+        run: npm run build
+
+      - name: Frontend audit
+        working-directory: ./web
+        run: npm audit --audit-level=moderate

@@ -1,0 +1,9 @@
+[
+  {
+    "id": "bootstrap-admin",
+    "username": "admin",
+    "roles": [
+      "admin"
+    ]
+  }
+]
