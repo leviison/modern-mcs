@@ -22,6 +22,7 @@ export function NavBar() {
     <header className="topbar">
       <div className="brand">modern-mcs admin</div>
       <nav className="navlinks">
+        <Link to="/dashboard">Dashboard</Link>
         <Link to="/sql-profiles">SQL Profiles</Link>
         <Link to="/sessions">Sessions</Link>
         <Link to="/migrations">Migrations</Link>

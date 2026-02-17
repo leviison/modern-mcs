@@ -3,6 +3,7 @@ import { NavBar } from './components/NavBar'
 import { RequireAuth } from './components/RequireAuth'
 import { useAuth } from './context/AuthContext'
 import { LoginPage } from './pages/LoginPage'
+import { DashboardPage } from './pages/DashboardPage'
 import { SQLProfilesPage } from './pages/SQLProfilesPage'
 import { SessionsPage } from './pages/SessionsPage'
 import { MigrationsPage } from './pages/MigrationsPage'
@@ -23,6 +24,14 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedLayout>
+            <DashboardPage />
+          </ProtectedLayout>
+        }
+      />
       <Route
         path="/sql-profiles"
         element={
@@ -55,7 +64,7 @@ export default function App() {
           </ProtectedLayout>
         }
       />
-      <Route path="*" element={<Navigate to={auth.isAuthenticated ? '/sql-profiles' : '/login'} replace />} />
+      <Route path="*" element={<Navigate to={auth.isAuthenticated ? '/dashboard' : '/login'} replace />} />
     </Routes>
   )
 }

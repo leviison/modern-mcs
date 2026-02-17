@@ -25,7 +25,7 @@ export function LoginPage() {
         username: res.user.username,
         roles: res.user.roles
       })
-      navigate('/sql-profiles')
+      navigate('/dashboard')
     } catch (err) {
       setError(getErrorMessage(err, 'Login failed'))
     } finally {

@@ -181,6 +181,37 @@ th {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
 }
 
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.dashboard-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #dce5f1;
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 14px;
+}
+
+.dashboard-card:hover {
+  border-color: #9dc0e6;
+  background: #eef6ff;
+}
+
+.dashboard-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.dashboard-card p {
+  margin: 0;
+  color: #3f5670;
+}
+
 @media (max-width: 760px) {
   .topbar {
     flex-direction: column;
